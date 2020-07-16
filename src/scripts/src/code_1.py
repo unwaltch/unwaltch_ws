@@ -11,7 +11,7 @@ from std_msgs.msg import *
 def Internet_On():
 	try:
 		command='ping -c 1 google.com'
-		sp.check_output(command.split()) != True
+		sp.check_output(command.split(),shell=True,capture_output=False) != True
 		print("Internet is on !")
 		return True
 	except:
@@ -19,7 +19,7 @@ def Internet_On():
 		return False
 def SSD_On():
 	try:
-		mode = os.stat("/dev/sda2").st_mode		
+		mode = os.stat("/dev/eatronssd").st_mode		
 		stat.S_ISBLK(mode)
 		print("SSD is okay !")
 		return True
@@ -46,7 +46,11 @@ if __name__ == "__main__":
 		print("Bag has been created !")
 		bag = rosbag.Bag(str(datetime.now().strftime("%H-%M")),'w')
 	
-	Record_To_Bag(bag)
+	Internet_On()
+	SSD_On
+	
+
+	'''Record_To_Bag(bag)'''
 	
 
 
