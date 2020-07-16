@@ -9,23 +9,25 @@ import rosbag
 from std_msgs.msg import *
 
 def Internet_On():
-	try:
-		command='ping -c 1 google.com'
-		sp.check_output(command.split(),shell=True,capture_output=False) != True
-		print("Internet is on !")
+	command="ping -c 1 google.com"
+	check = sp.call(command.split(),stdout=None) is 0;
+	if check is True:
+		print("Internet is connected !")
 		return True
-	except:
-		print("Internet is off !")
+	else:
+		print("Internet is not connected !")
 		return False
+
 def SSD_On():
 	try:
-		mode = os.stat("/dev/eatronssd").st_mode		
+		mode = os.stat("/dev/sda2").st_mode		
 		stat.S_ISBLK(mode)
 		print("SSD is okay !")
 		return True
 	except:
 		print("SSD is not connected !")
 		return False
+
 def Record_To_Bag(bag):
 	while not rospy.is_shutdown():
 		bag.write([],[],raw=False)
@@ -46,8 +48,6 @@ if __name__ == "__main__":
 		print("Bag has been created !")
 		bag = rosbag.Bag(str(datetime.now().strftime("%H-%M")),'w')
 	
-	Internet_On()
-	SSD_On
 	
 
 	'''Record_To_Bag(bag)'''
